@@ -26,3 +26,55 @@
 
 ## Methodology
 
+My methodology for this project was a two-pronged approach: *data augmentation* and *model ensembles*.
+
+
+<u>Data Augmentation</u>:
+
+The first step was to address the imbalance in the dataset. The original dataset was skewed, with some classes of road signs having significantly more images than others (Figure 1). This imbalance could potentially bias the model towards the classes with more images, leading to a less accurate recognition of the underrepresented classes.
+
+![Figure 1, Original Data Distribution](images/image5_scaled.png)
+
+**_Figure 1, Original Data Distribution_**
+
+
+To rectify this, I used a technique called data augmentation. Data augmentation is a process where we create new training samples by applying various transformations to the existing images. These transformations include rotation, shifting (both width and height), shearing, zooming, flipping, and filling. This process not only helped us balance the dataset but also increased the total number of images, which is beneficial for model training.
+
+
+To automate the data augmentation process, I wrote a Python script using the TensorFlow and Keras libraries. The script traversed through each class in the dataset, applied the transformations to each image, and saved the new images in an augmented directory. This was a crucial step as it allowed us to generate a more diverse set of images for each class, thereby enhancing the robustness of the model. 
+
+The result of this process was a more balanced dataset with a significantly higher number of total images (Figure 2). 
+
+![Figure 2, Augmented Data Distribution](images/image4_scaled.png)
+
+**_Figure 2, Augmented Data Distribution_**
+
+
+For example, an original image of a 30 km/h speed limit sign (Figure 3) was transformed into a new, rotated image (Figure 4). 
+
+![Figure 3, Original Image from Class 1](images/image3.jpg)
+
+**_Figure 3, Original Image from Class 1_**
+
+![Figure 4, Augmented Image from Class 1](images/image1.jpg)
+
+**_Figure 4, Augmented Image from Class 1_**
+
+This illustrates how data augmentation can create varied representations of the same sign, enabling the model to recognize signs under different conditions.
+
+
+<u>Model Ensembles</u>:
+
+One of the primary considerations was whether to develop a new model or utilize a pre-built architecture. After careful deliberation I concluded that leveraging a pre-built architecture would be the most suitable approach. This decision prompted us to confront another question: which pre-built architecture should I adopt? Interestingly, my solution involved employing multiple models simultaneously, also referred to as the ensemble approach.
+
+I assembled an ensemble of models, which can be likened to a team of experts, each bringing their unique strengths to the table. This team consisted of two pre-trained models: DenseNet121 and ResNet50V2. Each of these models was independently trained on the augmented data, developing their own unique understanding and interpretation of the road signs.
+
+To visualize this concept, consider Figure 5 below. It illustrates the general structure of an ensemble of models. Each model in the ensemble (in our case, DenseNet121 and ResNet50V2) operates independently, processing the input data and generating its own predictions. These predictions are then combined, much like a team coming together to make a final decision based on their individual expertise. This ensemble approach leverages the strengths of each model, leading to a more robust and accurate overall prediction.
+
+![Figure 5, Structure for Model Ensemble](images/image2_scaled.png)
+
+**_Figure 5, Structure for Model Ensemble_**
+
+When we present an image to this team, each expert makes its own prediction about what sign is in the image. Then, they come together and take a vote.The sign that gets the most votes is the one that the team as a whole predicts.
+
+## Results
